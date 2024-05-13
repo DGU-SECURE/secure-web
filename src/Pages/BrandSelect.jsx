@@ -82,23 +82,29 @@ const RESULT =styled.div`
     }
   }
 `
-function BrandSelect(){
+function BrandSelect() {
     const navigate = useNavigate();
-    const [search, setSearch] = useState([]); // 상태 추가
-    const [searchText,setSearchText] = useState('');
+    const [search, setSearch] = useState([]);
+    const [searchText, setSearchText] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const getSearch = async () => {
+        setIsLoading(true);
+        setError('');
         try {
             const resp = await api.post(`/brand/search?brandName=${encodeURIComponent(searchText)}`);
-            if(resp && resp.data) {
-                setSearch(Array.isArray(resp.data) ? resp.data : [resp.data]);
-            }
-            else {
+            if (resp && resp.data && resp.data.datalist) {
+                setSearch(Array.isArray(resp.data.datalist) ? resp.data.datalist : [resp.data.datalist]);
+            } else {
                 console.error('No data received');
+                setError('데이터를 받지 못했습니다.');
             }
         } catch (error) {
             console.error('Error fetching data: ', error);
+            setError('데이터를 가져오는 중 오류가 발생했습니다.');
         }
+        setIsLoading(false);
     };
 
     return (
@@ -115,21 +121,27 @@ function BrandSelect(){
                     </SEARCH>
                 </CONTAINER>
                 <LIST>
-                    <RESULT>
-                        <table>
-                            <tbody>
-                            {search.map((brand) => (
-                                <tr key={brand.id}>
-                                    <td>{brand.brand_name}</td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </RESULT>
+                    {isLoading ? (
+                        <p>로딩 중...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : (
+                        <RESULT>
+                            <table>
+                                <tbody>
+                                {search.map((brand) => (
+                                    <tr key={brand.id}>
+                                        <td>{brand.brand_name}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </RESULT>
+                    )}
                 </LIST>
             </div>
         </>
     );
-};
+}
 
 export default BrandSelect;
