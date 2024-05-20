@@ -101,7 +101,7 @@ function Topbar(){
                 <h3>김태욱</h3>
                 <span>님 반갑습니다</span>
                 <IconWrapper>
-                    <TiShoppingCart onClick={() => navigate(`/customer/shoppingcart`)}
+                    <TiShoppingCart onClick={() => navigate(`/shoppingcart`)}
                                     size="45" color="#5D6679"/>
                 </IconWrapper>
             </RIGHT>
@@ -115,7 +115,7 @@ function Topbar(){
                         </StyledLink>
                     </LI>
                     <LI>
-                        <StyledLink to={`/selectItems`} isActive={location.pathname === `/selectItems`}>
+                        <StyledLink to={`/selectitem`} isActive={location.pathname === `/selectitem`}>
                             <span> 상품목록</span>
                         </StyledLink>
                     </LI>

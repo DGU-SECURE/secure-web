@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
-import { IoIosSearch } from "react-icons/io";
+import { IoIosSearch} from "react-icons/io";
 import api from "../Axios";
+import { useRecoilState } from 'recoil';
+import { selectedBrandIdState, brandNameState} from '../state';
+
 
 const SEARCH = styled.div`
   display: flex;
@@ -82,10 +85,33 @@ const RESULT =styled.div`
     }
   }
 `
+const BUTTON = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top:30px;
+  button{
+    cursor: pointer;
+    width:80px;
+    height:40px;
+    font-size:15px;
+    background-color: #397CA8;
+    border-radius: 5px;
+    border-color: white;
+    color:white;
+    &:hover{
+      background-color: darkblue;
+    }
+  }
+`
+
 function BrandSelect() {
     const navigate = useNavigate();
     const [search, setSearch] = useState([]);
     const [searchText, setSearchText] = useState('');
+    const [tempBrandName, setTempBrandName] = useState(''); // 임시 상점 이름 상태
+    const [tempBrandId, setTempBrandId] = useState(null); // 임시 상점 ID 상태
+    const [brandName, setBrandName] = useRecoilState(brandNameState);
+    const [selectedBrandId, setSelectedBrandId] = useRecoilState(selectedBrandIdState);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -93,7 +119,7 @@ function BrandSelect() {
         setIsLoading(true);
         setError('');
         try {
-            const resp = await api.post(`/brand/search?brandName=${encodeURIComponent(searchText)}`);
+            const resp = await api.get(`/brand/search?brandName=${encodeURIComponent(searchText)}`);
             if (resp && resp.data && resp.data.datalist) {
                 setSearch(Array.isArray(resp.data.datalist) ? resp.data.datalist : [resp.data.datalist]);
             } else {
@@ -105,6 +131,22 @@ function BrandSelect() {
             setError('데이터를 가져오는 중 오류가 발생했습니다.');
         }
         setIsLoading(false);
+    };
+
+    const selectStore = (brandId, brandName) => {
+        setTempBrandId(brandId);
+        setTempBrandName(brandName);
+    };
+
+    const moveToItems = () => {
+        if (tempBrandId) {
+            setBrandName(tempBrandName);
+            setSelectedBrandId(tempBrandId);
+            alert(`선택된 브랜드로 이동합니다.`);
+            navigate(`/${tempBrandId}/selectitem`);
+        } else {
+            alert('브랜드가 선택되지 않았습니다.');
+        }
     };
 
     return (
@@ -129,8 +171,14 @@ function BrandSelect() {
                         <RESULT>
                             <table>
                                 <tbody>
-                                {search.map((brand) => (
-                                    <tr key={brand.id}>
+                                {search&&search.map((brand)=> (
+                                    <tr key={brand.id}  onClick={() => selectStore(brand.id, brand.brand_name)}
+                                        style={{
+                                            cursor: 'pointer',
+                                            backgroundColor: tempBrandId === brand.id ? '#F5FCFF' : '#fff',
+                                            fontWeight: tempBrandId === brand.id ? 'bold' : 'normal'
+                                        }}
+                                    >
                                         <td>{brand.brand_name}</td>
                                     </tr>
                                 ))}
@@ -139,6 +187,9 @@ function BrandSelect() {
                         </RESULT>
                     )}
                 </LIST>
+                <BUTTON>
+                    <button onClick={moveToItems}>선택</button>
+                </BUTTON>
             </div>
         </>
     );
