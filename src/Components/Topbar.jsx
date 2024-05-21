@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useRecoilValue } from 'recoil';
+import { selectedBrandIdState } from '../state';
 import { TiShoppingCart } from "react-icons/ti";
 import { Link,useLocation,useNavigate } from "react-router-dom";
 
@@ -91,6 +93,7 @@ const StyledLink = styled(Link)`
 function Topbar(){
     const navigate = useNavigate();
     const location = useLocation();
+    const brandId = useRecoilValue(selectedBrandIdState);
     return(
         <>
         <BOX>
@@ -115,7 +118,7 @@ function Topbar(){
                         </StyledLink>
                     </LI>
                     <LI>
-                        <StyledLink to={`/selectitem`} isActive={location.pathname === `/selectitem`}>
+                        <StyledLink to={`/${brandId}/selectitem`} isActive={location.pathname === `/${brandId}/selectitem`}>
                             <span> 상품목록</span>
                         </StyledLink>
                     </LI>
