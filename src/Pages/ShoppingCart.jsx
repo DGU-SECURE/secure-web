@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState} from 'recoil';
 import api from "../Axios";
-import {cartState, selectedBrandIdState, brandNameState} from '../state';
+import {cartState} from '../state';
 import styled from 'styled-components';
 import { FaRegCheckCircle } from "react-icons/fa";
 import { FaRegTrashAlt } from "react-icons/fa";
@@ -15,7 +15,7 @@ const Container = styled.div`
 `;
 const LeftDiv = styled.div`
   width: 75%;
-  margin-left:5%;
+  margin-left:8%;
 `;
 const RightDiv = styled.div`
   display: flex;
@@ -99,7 +99,7 @@ const RIGHTCONTENT = styled.div`
   margin-top:20px;
 `
 const STORE=styled.div`
-  width: 372px;
+  width: 440px;
   border-bottom:2px solid gray;
     span{
       font-size:20px;
@@ -112,7 +112,7 @@ const STORE=styled.div`
 const PURCHASEDETAIL = styled.div`
   padding-top:30px;
   padding-bottom:15px;
-  width:372px;
+  width:440px;
   height:205px;
   background-color: #F5FBEF;
   div{
@@ -154,8 +154,8 @@ const PAY = styled.div`
   }
   cursor:pointer;
   box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
-  width:372px;
-  height:83px;
+  width:440px;
+  height:86px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
 `
@@ -166,8 +166,6 @@ function ShoppingCart() {
     const [inputPoint, setInputPoint] = useState(0);
     const [usedPoint, setUsedPoint] = useState(0);
     const [paymentType, setPaymentType] = useState("신용/체크카드");
-    const storeId = useRecoilValue(selectedBrandIdState);
-    const storeName = useRecoilValue(brandNameState);
     const [selectedItems, setSelectedItems] = useState({});
     const [selectAll, setSelectAll] = useState(false);
 
@@ -175,7 +173,7 @@ function ShoppingCart() {
 
     const getPoint = async () => {
         try {
-            const resp = await api.get(`/customers/store/cart`);
+            const resp = await api.get(`/brand/cart`);
             if(resp && resp.data && resp.data.data) {
                 setPointCheck(resp.data.data);
             } else {
@@ -196,18 +194,6 @@ function ShoppingCart() {
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }, [cart]);
-
-    useEffect(() => {
-        const savedStoreId = localStorage.getItem('storeId');
-        if (storeId !== savedStoreId) {
-            setCart([]);
-            localStorage.setItem('cart', JSON.stringify([]));
-        }
-    }, [storeId]);
-
-    useEffect(() => {
-        localStorage.setItem('storeId', storeId);
-    }, [storeId]);
 
     useEffect(() => {
         if (selectAll) {
@@ -273,11 +259,11 @@ function ShoppingCart() {
         if (pointCheck.balance < totalAmount - usedPoint) {
             alert(`카드 잔고가 부족합니다.\n현재 잔고: ${pointCheck.balance}원`);
         } else {
-            api.post(`/customers/store/${storeId}/payment`, data)
+            api.post(`/customers/payment`, data)
                 .then((response) => {
-                    const { id, orderNumber, itemName, totalPrice, savedPoint, usedPoint, orderDate, paymentType, storeName, storeAddress } = response.data.data;
+                    const { id, orderNumber, itemName, totalPrice, savedPoint, usedPoint, orderDate, paymentType, orderStatus} = response.data.data;
                     alert(`상품이 구매되었습니다.`);
-                    navigate(`/customer/checkpayment`, { state: { data: response.data.data } });
+                    navigate(`/checkpayment`, { state: { data: response.data.data } });
                     localStorage.setItem('cart', JSON.stringify([]));
                     setCart([]);
                 })
@@ -290,6 +276,7 @@ function ShoppingCart() {
     useEffect(() => {
         getPoint();
     }, []);
+
 
     return (
         <div>
@@ -341,7 +328,10 @@ function ShoppingCart() {
                                 <FaMapLocationDot size="2em" style={{ marginRight: "10px" }} />
                                 <span>주문배송 정보</span>
                             </div>
-                            <div><p style={{fontWeight:"bold"}}>{storeName}</p></div>
+                            <div>
+                                <p>받는 분: 김태욱</p>
+                                <p>주소：서울특별시 중구 충무로2길  1층</p>
+                            </div>
                         </STORE>
                         <PURCHASEDETAIL>
                             <div><span>총 상품금액 : {totalAmount}원</span></div>

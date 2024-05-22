@@ -56,7 +56,6 @@ const IconWrapper = styled.div`
     cursor: pointer;
   }
 `;
-
 const NAVI = styled.div`
   margin-top: 30px;
   align-items: center;
@@ -73,7 +72,6 @@ const UL = styled.div`
     align-items: center;  /* Centers items vertically */
     justify-content: space-around; /* Evenly spaces the items along the line */
 `
-
 const LI = styled.div`
   margin-right: 20px;
   span{
@@ -83,7 +81,6 @@ const LI = styled.div`
     font-weight: bold;
   }}
 `
-
 const StyledLink = styled(Link)`
   text-decoration: none;
   font-size: 18px;

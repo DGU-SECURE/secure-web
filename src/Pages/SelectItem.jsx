@@ -180,13 +180,14 @@ function SelectItem(){
         page: 0,
         size: 8
     });
-    const getInfo = async(page=0) =>{
+    const getInfo = async (page = 0) => {
         try {
+            // storedBrandId를 사용하여 API 호출
             const queryString = Object.entries(search)
                 .map((e) => e.join('='))
                 .join('&');
-            const resp = await api.get(`/brand/${brandId}?`+queryString);
-            if(resp && resp.data && resp.data.data && resp.data.data.datalist) {
+            const resp = await api.get(`/brand/${brandId}?` + queryString);
+            if (resp && resp.data && resp.data.data && resp.data.data.datalist) {
                 setProduct(resp.data.data);
             } else {
                 console.error('No data received');
@@ -195,16 +196,13 @@ function SelectItem(){
             console.error('Error fetching data: ', error);
         }
     }
+
     const selectItem = (id) => {
         setSelectedItem(id);
         setNumber(1);
     }
     const onIncrease = () => {
-        const selectedItemInfo = product.datalist.find(item => item.id === selectedItem);
-        const cartQuantity = JSON.parse(localStorage.getItem('cart')).find(item => item.id === selectedItem)?.quantity || 0;
-        if (selectedItemInfo && number < selectedItemInfo.stock - cartQuantity) {
-            setNumber(number + 1);
-        }
+        setNumber(number + 1);
     }
     const onDecrease = () => {
         if (number > 1) {

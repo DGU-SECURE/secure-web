@@ -6,7 +6,6 @@ import api from "../Axios";
 import { useRecoilState } from 'recoil';
 import { selectedBrandIdState, brandNameState} from '../state';
 
-
 const SEARCH = styled.div`
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
@@ -133,16 +132,19 @@ function BrandSelect() {
         setIsLoading(false);
     };
 
-    const selectStore = (brandId, brandName) => {
+    const selectBrand = (brandId, brandName) => {
         setTempBrandId(brandId);
         setTempBrandName(brandName);
     };
 
     const moveToItems = () => {
         if (tempBrandId) {
+            // 선택된 브랜드명과 ID를 Recoil 상태에 저장
             setBrandName(tempBrandName);
             setSelectedBrandId(tempBrandId);
-            alert(`선택된 브랜드로 이동합니다.`);
+            // localStorage에 선택된 brandId 저장
+            localStorage.setItem('brandId', tempBrandId);
+            alert(`선택된 브랜드: ${tempBrandName}로 이동합니다.`);
             navigate(`/${tempBrandId}/selectitem`);
         } else {
             alert('브랜드가 선택되지 않았습니다.');
@@ -172,7 +174,7 @@ function BrandSelect() {
                             <table>
                                 <tbody>
                                 {search&&search.map((brand)=> (
-                                    <tr key={brand.id}  onClick={() => selectStore(brand.id, brand.brand_name)}
+                                    <tr key={brand.id}  onClick={() => selectBrand(brand.id, brand.brand_name)}
                                         style={{
                                             cursor: 'pointer',
                                             backgroundColor: tempBrandId === brand.id ? '#F5FCFF' : '#fff',
