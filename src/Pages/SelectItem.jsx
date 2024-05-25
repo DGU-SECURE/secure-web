@@ -168,7 +168,7 @@ const PAGEBUTTON = styled.div`
 `;
 
 function SelectItem(){
-    const[product, setProduct] = useState({datalist:[],pageInfo:{}});
+    const[product, setProduct] = useState({datalist:[],page_info:{}});
     const [number, setNumber] = useState(1);
     const[selectedItem, setSelectedItem] = useState(null);
     const [brandId, setBrandId] = useRecoilState(selectedBrandIdState);
@@ -177,8 +177,7 @@ function SelectItem(){
     const [search, setSearch] = useState({
         category: '',
         name: '',
-        page: 0,
-        size: 8
+        page_num: 0
     });
     const getInfo = async (page = 0) => {
         try {
@@ -186,7 +185,7 @@ function SelectItem(){
             const queryString = Object.entries(search)
                 .map((e) => e.join('='))
                 .join('&');
-            const resp = await api.get(`/brand/${brandId}?` + queryString);
+            const resp = await api.get(`/customers/items/${brandId}?` + queryString);
             if (resp && resp.data && resp.data.data && resp.data.data.datalist) {
                 setProduct(resp.data.data);
             } else {
@@ -278,10 +277,11 @@ function SelectItem(){
                     <SEARCH>
                         <select name="category" onChange={onChange}>
                             <option value="">전체</option>
-                            <option value="상의">상의</option>
-                            <option value="하의">하의</option>
-                            <option value="모자">모자</option>
-                            <option value="아우터">아우터</option>
+                            <option value="TOP">상의</option>
+                            <option value="BOTTOM">하의</option>
+                            <option value="SHOES">신발</option>
+                            <option value="ACCESSORIES">액세서리</option>
+                            <option value="HAT">모자</option>
                         </select>
                         <input type="text" name="name" id="" onChange={onChange} placeholder="상품명을 입력해주세요" />
                         <button onClick={onSearch}>
@@ -319,7 +319,7 @@ function SelectItem(){
                         </div>
                     </PRODUCT>
                     <PAGEBUTTON>
-                        {[...Array(product.pageInfo.totalPages)].map((_, index) => (
+                        {[...Array(product.page_info.totalPage)].map((_, index) => (
                             <button onClick={() => moveToPage(index)}
                                     style={{
                                         color: currentPage === index ? 'darkblue' : 'black',

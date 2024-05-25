@@ -173,7 +173,7 @@ function ShoppingCart() {
 
     const getPoint = async () => {
         try {
-            const resp = await api.get(`/brand/cart`);
+            const resp = await api.get(`/customers/payment`);
             if(resp && resp.data && resp.data.data) {
                 setPointCheck(resp.data.data);
             } else {
@@ -243,16 +243,14 @@ function ShoppingCart() {
         const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
 
         const items = storedCart.map((item) => ({
-            id: item.id,
-            quantity: item.quantity,
+            item_id: item.id,
+            item_quantity: item.quantity,
         }));
 
         const data = {
-            type: paymentType,
             point: usedPoint,
-            totalPrice: totalAmount,
-            itemName: storedCart.length > 0 ? storedCart[0].name : null,
-            itemCount: storedCart.length,
+            total_price: totalAmount,
+            payment_type: paymentType,
             items: items,
         };
 
@@ -261,7 +259,6 @@ function ShoppingCart() {
         } else {
             api.post(`/customers/payment`, data)
                 .then((response) => {
-                    const { id, orderNumber, itemName, totalPrice, savedPoint, usedPoint, orderDate, paymentType, orderStatus} = response.data.data;
                     alert(`상품이 구매되었습니다.`);
                     navigate(`/checkpayment`, { state: { data: response.data.data } });
                     localStorage.setItem('cart', JSON.stringify([]));

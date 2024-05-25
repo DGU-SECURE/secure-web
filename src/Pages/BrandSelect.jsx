@@ -118,9 +118,9 @@ function BrandSelect() {
         setIsLoading(true);
         setError('');
         try {
-            const resp = await api.get(`/brand/search?brandName=${encodeURIComponent(searchText)}`);
-            if (resp && resp.data && resp.data.datalist) {
-                setSearch(Array.isArray(resp.data.datalist) ? resp.data.datalist : [resp.data.datalist]);
+            const resp = await api.get(`/customers/store?name=${encodeURIComponent(searchText)}`);
+            if (resp && resp.data && resp.data.data) {
+                setSearch(Array.isArray(resp.data.data) ? resp.data.data : [resp.data.data]);
             } else {
                 console.error('No data received');
                 setError('데이터를 받지 못했습니다.');
@@ -174,14 +174,14 @@ function BrandSelect() {
                             <table>
                                 <tbody>
                                 {search&&search.map((brand)=> (
-                                    <tr key={brand.id}  onClick={() => selectBrand(brand.id, brand.brand_name)}
+                                    <tr key={brand.id}  onClick={() => selectBrand(brand.store_id, brand.store_name)}
                                         style={{
                                             cursor: 'pointer',
-                                            backgroundColor: tempBrandId === brand.id ? '#F5FCFF' : '#fff',
-                                            fontWeight: tempBrandId === brand.id ? 'bold' : 'normal'
+                                            backgroundColor: tempBrandId === brand.store_id ? '#F5FCFF' : '#fff',
+                                            fontWeight: tempBrandId === brand.store_id ? 'bold' : 'normal'
                                         }}
                                     >
-                                        <td>{brand.brand_name}</td>
+                                        <td>{brand.store_name}</td>
                                     </tr>
                                 ))}
                                 </tbody>

@@ -83,10 +83,10 @@ const Button = styled.div`
 function PaymentListDetail(){
     const [content,setContent]=useState({});
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {order_id} = useParams();
     const getContent = async () => {
         try {
-            const resp = await api.get(`/customers/histories/{order_id}`);
+            const resp = await api.get(`/customers/histories/${order_id}`);
             if(resp && resp.data && resp.data.data) {
                 setContent(resp.data.data);
             } else {
@@ -102,9 +102,9 @@ function PaymentListDetail(){
     }
     const refund = async()=>{
         try {
-            await api.post(`/customers/refund/${id}`);
+            await api.post(`/customers/histories/${order_id}`);
             alert('환불되었습니다.');
-            navigate(`/customer/paymentlist`);
+            navigate(`/paymentlist`);
         } catch (error) {
             console.error('Error updating the board: ', error);
         }
@@ -112,7 +112,7 @@ function PaymentListDetail(){
 
     useEffect(() => {
         getContent();
-    }, [id]);
+    }, [order_id]);
     return(<>
             <Content>
                 <Receipt>
@@ -123,7 +123,7 @@ function PaymentListDetail(){
                         </div>
                         <CONTENTS>
                             <div><span style={{marginRight:"74px"}}>상품명</span><span>{content.item_name}</span></div>
-                            <div><span>배달장소</span><span style={{marginRight:"20px"}}>{content.address}</span></div>
+                            <div><span>배달장소</span><span style={{marginRight:"20px"}}>서울특별시 중구 충무로2길 1층</span></div>
                             <div><span>주문번호</span><span>{content.order_code}</span></div>
                             <div><span>주문일자</span><span>{content.order_date}</span></div>
                             <div><span>결제수단</span><span>{content.payment_type}</span></div>
@@ -140,7 +140,7 @@ function PaymentListDetail(){
                             </PAY>
                         </div>
                         <Button order_status={content.order_status}>
-                            <button onClick={refund} disabled={content.order_status === "픽업완료" || content.order_status === "환불처리"}>
+                            <button onClick={refund} disabled={content.order_status === "환불불가"}>
                                 환불하기
                             </button>
                             <button onClick={moveToList}>돌아가기</button>

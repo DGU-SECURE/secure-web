@@ -30,7 +30,7 @@ function App() {
             <Route path='/shoppingcart' element={<ShoppingCart/>}/>
             <Route path='/checkpayment' element={<CheckPayment/>}/>
             <Route path='/paymentlist' element={<PaymentList/>}/>
-            <Route path='/paymentlist/:id' element={<PaymentListDetail/>}/>
+            <Route path='/paymentlist/:order_id' element={<PaymentListDetail/>}/>
         </Routes>
                 </>
         );
