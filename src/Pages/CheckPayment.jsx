@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const CONTAINER = styled.div`
   margin-left:70px;
-  margin-top:50px;
+  margin-top:20px;
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
   border: 2px solid rgba(150,150,150,0.1);
@@ -12,7 +12,7 @@ const CONTAINER = styled.div`
   height: 550px;
   `
 const CONTENT = styled.div`
-  margin-top:30px;
+  margin-top:10px;
 `
 const NAME = styled.div`
   width:1050px;
@@ -72,11 +72,11 @@ function CheckPayment() {
                 <CONTAINER>
                     <CONTENT>
                         <NAME>
-                            <span style={{color:'#7D3838',fontSize:"50px"}}>결제가 완료</span>
-                            <span style={{fontSize:"50px"}}>되었습니다</span>
+                            <span style={{color: '#7D3838', fontSize: "50px"}}>결제가 완료</span>
+                            <span style={{fontSize: "50px"}}>되었습니다</span>
                         </NAME>
                         <INFO>
-                            <div><span style={{marginRight:"43px"}}>상품명</span><span>{itemName}</span></div>
+                        <div><span style={{marginRight:"43px"}}>상품명</span><span>{itemName}</span></div>
                             <div><span style={{marginRight:"30px"}}>픽업장소</span><span>{storeName}</span><span style={{marginLeft:"20px"}}>({storeAddress})</span></div>
                             <div><span style={{marginRight:"30px"}}>주문번호</span><span>{orderNumber}</span></div>
                             <div><span style={{marginRight:"30px"}}>주문일자</span><span>{orderDate}</span></div>
