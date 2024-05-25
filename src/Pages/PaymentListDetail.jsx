@@ -83,10 +83,10 @@ const Button = styled.div`
 function PaymentListDetail(){
     const [content,setContent]=useState({});
     const navigate = useNavigate();
-    const {id} = useParams();
+    const {order_id} = useParams();
     const getContent = async () => {
         try {
-            const resp = await api.get(`/customers/histories/{order_id}`);
+            const resp = await api.get(`/customers/histories/${order_id}`);
             if(resp && resp.data && resp.data.data) {
                 setContent(resp.data.data);
             } else {
@@ -102,9 +102,9 @@ function PaymentListDetail(){
     }
     const refund = async()=>{
         try {
-            await api.post(`/customers/refund/${id}`);
+            await api.post(`/customers/histories/${order_id}`);
             alert('환불되었습니다.');
-            navigate(`/customer/paymentlist`);
+            navigate(`/paymentlist`);
         } catch (error) {
             console.error('Error updating the board: ', error);
         }
@@ -112,7 +112,7 @@ function PaymentListDetail(){
 
     useEffect(() => {
         getContent();
-    }, [id]);
+    }, [order_id]);
     return(<>
             <Content>
                 <Receipt>
