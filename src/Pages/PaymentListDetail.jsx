@@ -123,7 +123,7 @@ function PaymentListDetail(){
                         </div>
                         <CONTENTS>
                             <div><span style={{marginRight:"74px"}}>상품명</span><span>{content.item_name}</span></div>
-                            <div><span>배달장소</span><span style={{marginRight:"20px"}}>{content.address}</span></div>
+                            <div><span>배달장소</span><span style={{marginRight:"20px"}}>서울특별시 중구 충무로2길 1층</span></div>
                             <div><span>주문번호</span><span>{content.order_code}</span></div>
                             <div><span>주문일자</span><span>{content.order_date}</span></div>
                             <div><span>결제수단</span><span>{content.payment_type}</span></div>
@@ -140,7 +140,7 @@ function PaymentListDetail(){
                             </PAY>
                         </div>
                         <Button order_status={content.order_status}>
-                            <button onClick={refund} disabled={content.order_status === "픽업완료" || content.order_status === "환불처리"}>
+                            <button onClick={refund} disabled={content.order_status === "환불불가"}>
                                 환불하기
                             </button>
                             <button onClick={moveToList}>돌아가기</button>

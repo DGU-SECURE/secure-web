@@ -259,7 +259,6 @@ function ShoppingCart() {
         } else {
             api.post(`/customers/payment`, data)
                 .then((response) => {
-                    const { id, orderNumber, itemName, totalPrice, savedPoint, usedPoint, orderDate, paymentType, orderStatus} = response.data.data;
                     alert(`상품이 구매되었습니다.`);
                     navigate(`/checkpayment`, { state: { data: response.data.data } });
                     localStorage.setItem('cart', JSON.stringify([]));
