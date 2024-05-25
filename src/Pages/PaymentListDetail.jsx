@@ -140,7 +140,7 @@ function PaymentListDetail(){
                             </PAY>
                         </div>
                         <Button order_status={content.order_status}>
-                            <button onClick={refund} disabled={content.order_status === "환불불가"}>
+                            <button onClick={refund} disabled={content.order_status === "환불 불가"}>
                                 환불하기
                             </button>
                             <button onClick={moveToList}>돌아가기</button>
