@@ -1,6 +1,5 @@
-import React,{useState, useEffect} from "react";
-import { useNavigate } from 'react-router-dom';
-import api from "../Axios";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 
 const CONTAINER = styled.div`
@@ -9,18 +8,18 @@ const CONTAINER = styled.div`
   border-radius: 5px;
   box-shadow: rgba(0, 0, 0, 0.16) 0 1px 4px;
   width: 92%;
-  `
+`
 const NAME = styled.div`
   width:1050px;
   height:80px;
-    padding-top:15px;
-    padding-left:15px;
+  padding-top:15px;
+  padding-left:15px;
 `
 const Button = styled.div`
   display: flex;
   justify-content: flex-end;
-    margin-top:20px;
-    padding-bottom:30px;
+  margin-top:20px;
+  padding-bottom:30px;
   button{
     cursor: pointer;
     width:80px;
@@ -33,52 +32,39 @@ const Button = styled.div`
     &:hover{
       background-color: darkblue;
     }
+  }
 `
 const Table = styled.table`
-    width: 1398px;
-    border-top: 3px solid black;
-    border-collapse: collapse;
-    th, td {
-        border-bottom: 1px solid lightgrey;
-        height: 50px;
-        text-align: center;
-    }
+  width: 1398px;
+  border-top: 3px solid black;
+  border-collapse: collapse;
+  th, td {
+    border-bottom: 1px solid lightgrey;
+    height: 50px;
+    text-align: center;
+  }
 `;
 
 function CheckPayment() {
-    const [listItem, setListItem] = useState({ data_list: [], total_price: 0, used_point: 0, saved_point: 0, order_date: '', payment_type: '' });
-    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
+    const listItem = location.state.data; // 데이터를 location.state에서 바로 받아옴
+
     const userName = localStorage.getItem('user_name');
     const address = localStorage.getItem('address');
-    const getItem = async () => {
-        try {
-            const resp = await api.post(`/customers/payments`);
-            if (resp && resp.data && resp.data.data) {
-                setListItem(resp.data.data);
-            } else {
-                console.error('데이터를 받지 못했습니다');
-            }
-        } catch (error) {
-            console.error('데이터 가져오기 오류: ', error);
-        } finally {
-            setIsLoading(false); // 데이터 로딩이 끝나면 로딩 상태를 false로 설정
-        }
-    };
+
     const moveToItems = () => {
         navigate(`/brandselect`);
     };
     const moveToList = () => {
         navigate(`/paymentlist`);
     };
-    useEffect(() => {
-        getItem();
-    }, []);
 
-    if (isLoading) {
-        return <div>Loading...</div>; // 로딩 중 표시
+    if (!listItem) {
+        return <div>Loading...</div>; // 데이터가 없을 경우 로딩 표시
     }
-    return(
+
+    return (
         <>
             <div>
                 <CONTAINER>
@@ -90,22 +76,16 @@ function CheckPayment() {
                         <h2 style={{marginLeft: "20px"}}>주문 상세 내역</h2>
                         <Table>
                             <tbody>
-                            <tr>
-                                <th style={{width: "150px"}}>상품사진</th>
-                                <th style={{width: "150px"}}>상품명</th>
-                                <th style={{width: "100px"}}>수량</th>
-                                <th style={{width: "150px"}}>주문일자</th>
-                                <th style={{width: "150px"}}>주문번호</th>
-                                <th style={{width: "150px"}}>주문금액</th>
-                                <th style={{width: "150px"}}>주문상태</th>
-                            </tr>
                             {listItem.data_list.map((list) => (
                                 <tr style={{height: "90px"}} key={list.id}>
-                                    <td><img style={{width: "70px", height: "80px"}} src={list.thumbnail}
-                                             alt="상품사진"></img></td>
+                                    <td><img style={{width: "70px", height: "80px"}} src={list.thumbnail} alt="상품사진"/></td>
                                     <td>{list.name}</td>
                                     <td>{list.item_quantity}</td>
-                                    <td>{listItem.order_date}</td>
+                                    <td>{new Date(listItem.order_date).toLocaleDateString('ko-KR', {
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit'
+                                    }).replace(/\./g, "").replace(/ /g, ".")}</td>
                                     <td>{list.item_code}</td>
                                     <td>{list.price}원</td>
                                     <td>{list.order_status}</td>
@@ -117,10 +97,6 @@ function CheckPayment() {
                         <Table>
                             <tbody>
                             <tr>
-                                <th style={{width: "150px"}}>이름</th>
-                                <th style={{width: "400px"}}>배송지</th>
-                            </tr>
-                            <tr>
                                 <td>{userName}</td>
                                 <td>{address}</td>
                             </tr>
@@ -130,24 +106,20 @@ function CheckPayment() {
                         <Table>
                             <tbody>
                             <tr>
-                                <th style={{width: "150px"}}>결제수단</th>
-                                <th style={{width: "400px"}}>총 결제 금액</th>
-                            </tr>
-                            <tr>
                                 <td>{listItem.payment_type}</td>
-                                <td>{listItem.total_price}원 ( 포인트 사용: -{listItem.used_point} / 포인트 적립: +{listItem.saved_point} )</td>
+                                <td>{listItem.total_price}원 (포인트 사용: -{listItem.used_point} / 포인트 적립: +{listItem.saved_point})</td>
                             </tr>
                             </tbody>
                         </Table>
                         <Button>
                             <button onClick={moveToItems}>추가구매</button>
-                            <button style={{marginLeft: "15px", marginRight: "55px"}} onClick={moveToList}>구매내역</button>
+                            <button onClick={moveToList}>구매내역</button>
                         </Button>
                     </div>
                 </CONTAINER>
             </div>
         </>
-    )
+    );
 }
 
 export default CheckPayment;
