@@ -123,7 +123,7 @@ function Login() {
         } catch (error) {
             // 네트워크 오류 등 처리
             console.error('로그인 요청 실패', error);
-            alert('로그인 요청에 실패했습니다.');
+            alert('로그인에 실패했습니다.');
         }
     };
 
