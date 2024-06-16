@@ -92,7 +92,11 @@ function PaymentList(){
                         <Tr key={list.order_id} onClick={() => navigate(`/paymentlist/${list.order_id}`)}>
                             <Td>{list.item_name}
                                 {list.item_count > 1 && ` 외 ${list.item_count - 1}개`}</Td>
-                            <Td>{list.order_date}</Td>
+                            <Td>{new Date(list.order_date).toLocaleDateString('ko-KR', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit'
+                            }).replace(/\./g, "").replace(/ /g, ".")}</Td>
                             <Td>{list.order_code}</Td>
                             <Td>{list.total_price}원</Td>
                             <Td style={{
