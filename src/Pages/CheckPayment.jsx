@@ -1,6 +1,5 @@
 import React,{useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState} from 'recoil';
 import api from "../Axios";
 import styled from "styled-components";
 
@@ -48,12 +47,13 @@ const Table = styled.table`
 
 function CheckPayment() {
     const [listItem, setListItem] = useState({ data_list: [], total_price: 0, used_point: 0, saved_point: 0, order_date: '', payment_type: '' });
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
     const userName = localStorage.getItem('user_name');
     const address = localStorage.getItem('address');
-    const getItem = async (page = 0) => {
+    const getItem = async () => {
         try {
-            const resp = await api.post(`/customers/payment`);
+            const resp = await api.post(`/customers/payments`);
             if (resp && resp.data && resp.data.data) {
                 setListItem(resp.data.data);
             } else {
@@ -61,6 +61,8 @@ function CheckPayment() {
             }
         } catch (error) {
             console.error('데이터 가져오기 오류: ', error);
+        } finally {
+            setIsLoading(false); // 데이터 로딩이 끝나면 로딩 상태를 false로 설정
         }
     };
     const moveToItems = () => {
@@ -71,7 +73,11 @@ function CheckPayment() {
     };
     useEffect(() => {
         getItem();
-    }, );
+    }, []);
+
+    if (isLoading) {
+        return <div>Loading...</div>; // 로딩 중 표시
+    }
     return(
         <>
             <div>
@@ -94,8 +100,7 @@ function CheckPayment() {
                                 <th style={{width: "150px"}}>주문상태</th>
                             </tr>
                             {listItem.data_list.map((list) => (
-                                <tr style={{height: "90px"}} key={list.id}
-                                    onClick={() => navigate(`/paymentlist/${list.id}`)}>
+                                <tr style={{height: "90px"}} key={list.id}>
                                     <td><img style={{width: "70px", height: "80px"}} src={list.thumbnail}
                                              alt="상품사진"></img></td>
                                     <td>{list.name}</td>
