@@ -168,7 +168,7 @@ const PAGEBUTTON = styled.div`
 `;
 
 function SelectItem(){
-    const[product, setProduct] = useState({datalist:[],page_info:{}});
+    const[product, setProduct] = useState({datalist:[],pageInfo:{}});
     const [number, setNumber] = useState(1);
     const[selectedItem, setSelectedItem] = useState(null);
     const [brandId, setBrandId] = useRecoilState(selectedBrandIdState);
@@ -185,7 +185,7 @@ function SelectItem(){
             const queryString = Object.entries(search)
                 .map((e) => e.join('='))
                 .join('&');
-            const resp = await api.get(`/customers/items/${brandId}/?` + queryString);
+            const resp = await api.get(`/customers/items/${brandId}?` + queryString);
             if (resp && resp.data && resp.data.data && resp.data.data.datalist) {
                 setProduct(resp.data.data);
             } else {
@@ -319,7 +319,7 @@ function SelectItem(){
                         </div>
                     </PRODUCT>
                     <PAGEBUTTON>
-                        {[...Array(product.page_info.totalPage)].map((_, index) => (
+                        {[...Array(product.pageInfo.totalPages)].map((_, index) => (
                             <button onClick={() => moveToPage(index)}
                                     style={{
                                         color: currentPage === index ? 'darkblue' : 'black',

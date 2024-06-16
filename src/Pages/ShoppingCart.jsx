@@ -165,7 +165,7 @@ function ShoppingCart() {
     const [pointCheck, setPointCheck] = useState({});
     const [inputPoint, setInputPoint] = useState(0);
     const [usedPoint, setUsedPoint] = useState(0);
-    const [paymentType, setPaymentType] = useState("신용/체크카드");
+    const [paymentType, setPaymentType] = useState("CARD");
     const [selectedItems, setSelectedItems] = useState({});
     const [selectAll, setSelectAll] = useState(false);
     const userName = localStorage.getItem('user_name');
@@ -340,9 +340,9 @@ function ShoppingCart() {
                                     value={paymentType}
                                     onChange={e => setPaymentType(e.target.value)}>
                                     <option value="CARD">신용/체크카드</option>
-                                    <option value="DIRECT_DEPOSIT">무통장입금</option>
-                                    <option value="BANK_TRANSFER">계좌이체</option>
-                                    <option value="MOBILE_PAYMENT">휴대폰결제</option>
+                                    <option value="DIRECT_DEPOSIT">무통장 입금</option>
+                                    <option value="BANK_TRANSFER">계좌 이체</option>
+                                    <option value="MOBILE_PAYMENT">휴대폰 결제</option>
                                 </select>
                             </div>
                             <div>
