@@ -168,6 +168,8 @@ function ShoppingCart() {
     const [paymentType, setPaymentType] = useState("신용/체크카드");
     const [selectedItems, setSelectedItems] = useState({});
     const [selectAll, setSelectAll] = useState(false);
+    const userName = localStorage.getItem('user_name');
+    const address = localStorage.getItem('address');
 
     const navigate = useNavigate();
 
@@ -241,7 +243,6 @@ function ShoppingCart() {
 
     const payment = () => {
         const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-
         const items = storedCart.map((item) => ({
             item_id: item.id,
             item_quantity: item.quantity,
@@ -326,8 +327,8 @@ function ShoppingCart() {
                                 <span>주문배송 정보</span>
                             </div>
                             <div>
-                                <p>받는 분: 김태욱</p>
-                                <p>주소：서울특별시 중구 충무로2길  1층</p>
+                                <p>받는 분: {userName}</p>
+                                <p>주소：{address}</p>
                             </div>
                         </STORE>
                         <PURCHASEDETAIL>
