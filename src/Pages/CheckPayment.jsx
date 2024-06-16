@@ -1,5 +1,6 @@
 import React,{useState, useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
+import { useRecoilState} from 'recoil';
 import api from "../Axios";
 import styled from "styled-components";
 
@@ -48,6 +49,8 @@ const Table = styled.table`
 function CheckPayment() {
     const [listItem, setListItem] = useState({ data_list: [], total_price: 0, used_point: 0, saved_point: 0, order_date: '', payment_type: '' });
     const navigate = useNavigate();
+    const userName = localStorage.getItem('user_name');
+    const address = localStorage.getItem('address');
     const getItem = async (page = 0) => {
         try {
             const resp = await api.post(`/customers/payment`);
@@ -113,8 +116,8 @@ function CheckPayment() {
                                 <th style={{width: "400px"}}>배송지</th>
                             </tr>
                             <tr>
-                                <td>김태욱</td>
-                                <td>서울특별시 중구 충무로2길 1층</td>
+                                <td>{userName}</td>
+                                <td>{address}</td>
                             </tr>
                             </tbody>
                         </Table>

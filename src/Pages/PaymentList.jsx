@@ -90,14 +90,15 @@ function PaymentList(){
                     </tr>
                     {listItem.data_list.map((list)=> (
                         <Tr key={list.order_id} onClick={() => navigate(`/paymentlist/${list.order_id}`)}>
-                            <Td>{list.item_name} 외 {list.item_count-1}개</Td>
+                            <Td>{list.item_name}
+                                {list.item_count > 1 && ` 외 ${list.item_count - 1}개`}</Td>
                             <Td>{list.order_date}</Td>
                             <Td>{list.order_code}</Td>
                             <Td>{list.total_price}원</Td>
                             <Td style={{
-                                color: list.order_status === "환불처리" ? "red" :
-                                    list.order_status === "주문확인" ? "green" :
-                                        list.order_status === "배송완료" ? "blue" : "initial"
+                                color: list.order_status === "환불 처리" ? "red" :
+                                    list.order_status === "주문 확인" ? "green" :
+                                        list.order_status === "배송 완료" ? "blue" : "initial"
                             }}>
                                 {list.order_status}
                             </Td>
