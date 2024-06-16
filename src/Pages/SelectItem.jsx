@@ -185,7 +185,7 @@ function SelectItem(){
             const queryString = Object.entries(search)
                 .map((e) => e.join('='))
                 .join('&');
-            const resp = await api.get(`/customers/items/${brandId}?` + queryString);
+            const resp = await api.get(`/customers/items/${brandId}/?` + queryString);
             if (resp && resp.data && resp.data.data && resp.data.data.datalist) {
                 setProduct(resp.data.data);
             } else {

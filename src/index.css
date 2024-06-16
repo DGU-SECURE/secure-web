@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
-
 :root {
   --primary: #0452d7;
   --primary2: #6ea3ff;
@@ -7,7 +5,7 @@
 }
 
 body {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: 'NanumSquareB', sans-serif;
   margin: 0;
 }
 

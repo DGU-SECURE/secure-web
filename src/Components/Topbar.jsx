@@ -22,12 +22,13 @@ const LEFT = styled.div`
   h1{
     font-size: 50px;
     color: black;
+      margin-top:50px;
   }
   div{
     width: 160px;
     font-size: 13px;
     margin-left: 10px;
-    margin-top: 30px;
+    margin-top: 40px;
     color: darkgreen;
     font-weight: bold;
   }
@@ -91,6 +92,7 @@ function Topbar(){
     const navigate = useNavigate();
     const location = useLocation();
     const brandId = useRecoilValue(selectedBrandIdState);
+    const userName = localStorage.getItem('user_name');
     return(
         <>
         <BOX>
@@ -98,7 +100,7 @@ function Topbar(){
                 <h1>NUSINSA</h1>
             </LEFT>
             <RIGHT>
-                <h3>김태욱</h3>
+                <h3>{userName}</h3>
                 <span>님 반갑습니다</span>
                 <IconWrapper>
                     <TiShoppingCart onClick={() => navigate(`/shoppingcart`)}

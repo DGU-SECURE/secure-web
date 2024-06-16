@@ -15,3 +15,7 @@ export const cartState = atom({
     key: 'cartState',
     default: JSON.parse(localStorage.getItem('cart')) || [],
 });
+export const isLoggedInState = atom({
+    key: 'isLoggedInState',
+    default: false,
+});
